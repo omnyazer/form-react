@@ -8,7 +8,15 @@ function App() {
     handleSubmit,
     reset,
     formState: { errors }
-  } = useForm({ mode: "onBlur" });
+  } = useForm({
+    mode: "onBlur",
+    defaultValues: {
+      name: "",
+      dueDate: "",
+      priority: "Basse",
+      isCompleted: false
+    }
+  });
 
   const onSubmit = (data) => {
     console.log("Données du formulaire :", data);
@@ -25,7 +33,7 @@ function App() {
           <Form.Control
             type="text"
             placeholder="Nom"
-            {...register("name", { required: "Veuillez entrer un nom de tâche" })}
+            {...register("name", { required: "Merci de renseigner un nom" })}
           />
           {errors.name && <p className="text-danger">{errors.name.message}</p>}
         </Form.Group>
@@ -34,7 +42,7 @@ function App() {
           <Form.Label>Date *</Form.Label>
           <Form.Control
             type="date"
-            {...register("dueDate", { required: "Veuillez entrer une date" })}
+            {...register("dueDate", { required: "La date est obligatoire" })}
           />
           {errors.dueDate && <p className="text-danger">{errors.dueDate.message}</p>}
         </Form.Group>
