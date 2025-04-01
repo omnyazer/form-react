@@ -10,19 +10,23 @@ today.setHours(0, 0, 0, 0);
 const schema = yup.object().shape({
   name: yup
     .string()
-    .required("Veuillez entrer un nom de tâche")
+    .required("Le nom est requis")
     .min(8, "Minimum 8 caractères")
     .max(15, "Maximum 15 caractères"),
 
   dueDate: yup
     .string()
-    .required("Veuillez entrer une date")
+    .required("La date est obligatoire")
     .matches(
       /^\d{2}\/\d{2}\/\d{4}$/, 
       "Format attendu : jj/mm/aaaa"
     )
-    .test("is-valid-date", "la date ne doit pas être antérieure au jour actuel", (value) => {
+    .test("is-valid-date", "La date ne doit pas être antérieure au jour actuel", (value) => {
       const [day, month, year] = value.split("/").map(Number);
+      if (!day || !month || !year) return false;
+      if (day < 1 || day > 31) return false;
+      if (month < 1 || month > 12) return false;
+      if (year < 1000 || year > 9999) return false;
       const inputDate = new Date(year, month - 1, day);
       return inputDate >= today;
     }),
