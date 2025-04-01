@@ -1,75 +1,58 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Form, Button, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
-  const [formData, setFormData] = useState({
-    name: "",
-    dueDate: "",
-    priority: "Basse",
-    isCompleted: false,
-  });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm({ mode: "onBlur" });
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Données du formulaire :", formData);
+  const onSubmit = (data) => {
+    console.log("Données du formulaire :", data);
+    reset();
   };
 
   return (
     <Container className="mt-4">
       <h2 className="text-center mb-4">Ajouter une tâche</h2>
 
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3">
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form.Group className="mb-3" controlId="taskName">
           <Form.Label>Nom *</Form.Label>
           <Form.Control
             type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
+            placeholder="Nom"
+            {...register("name", { required: "Veuillez entrer un nom de tâche" })}
           />
+          {errors.name && <p className="text-danger">{errors.name.message}</p>}
         </Form.Group>
 
-        <Form.Group className="mb-3">
+        <Form.Group className="mb-3" controlId="taskDate">
           <Form.Label>Date *</Form.Label>
           <Form.Control
             type="date"
-            name="dueDate"
-            value={formData.dueDate}
-            onChange={handleChange}
-            required
+            {...register("dueDate", { required: "Veuillez entrer une date" })}
           />
+          {errors.dueDate && <p className="text-danger">{errors.dueDate.message}</p>}
         </Form.Group>
 
-        <Form.Group className="mb-3">
+        <Form.Group className="mb-3" controlId="taskPriority">
           <Form.Label>Priorité</Form.Label>
-          <Form.Select
-            name="priority"
-            value={formData.priority}
-            onChange={handleChange}
-          >
+          <Form.Select {...register("priority")}> 
             <option value="Basse">Basse</option>
             <option value="Moyenne">Moyenne</option>
             <option value="Élevée">Élevée</option>
           </Form.Select>
         </Form.Group>
 
-        <Form.Group className="mb-3">
+        <Form.Group className="mb-3" controlId="taskCompleted">
           <Form.Check
             type="checkbox"
-            name="isCompleted"
             label="Tâche complétée"
-            checked={formData.isCompleted}
-            onChange={handleChange}
+            {...register("isCompleted")}
           />
         </Form.Group>
 
