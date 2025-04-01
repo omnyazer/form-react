@@ -40,7 +40,7 @@ function App() {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Date limite *</Form.Label>
+          <Form.Label>Date *</Form.Label>
           <Form.Control
             type="date"
             name="dueDate"
